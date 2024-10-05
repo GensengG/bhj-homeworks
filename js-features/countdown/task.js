@@ -5,12 +5,13 @@ function timer() {
         startValue -=1;
         timerElement.textContent = startValue;
     } else {
-    alert ("Вы победили в конкурсе!");
+        alert ("Вы победили в конкурсе!");
+        clearTimeout(timerId);
     }
 }
 
 timer();
-setInterval(timer, 1000)
+let timerId = setInterval(timer, 1000);
 
 
 // Повышенный уровень сложности #1
@@ -24,8 +25,9 @@ function timer() {
         startValue -=1;
         timerElement.textContent = `00:00:${startValue}`;
     } else {
-    alert ("Вы победили в конкурсе!");
+        alert ("Вы победили в конкурсе!");
+        clearTimeout(timerId);
     }
 }
 timer();
-setInterval(timer, 1000)
+let timerId = setInterval(timer, 1000)
