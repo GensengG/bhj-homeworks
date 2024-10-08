@@ -17,6 +17,42 @@ class Game {
   }
 
   registerEvents() {
+    const timerElement = document.querySelector(".timer");
+    const timer = Array.from(timerElement.textContent);
+    let timerNumber = Number(timer[2] + timer[3]);
+    // console.log(timerNumber);
+
+    function time() {
+      if(timerNumber > 10){
+        timerNumber -=1;
+        timerElement.textContent = `0:${timerNumber}`;
+      } else if (timerNumber > 0) {
+        timerNumber -=1;
+        timerElement.textContent = `0:0${timerNumber}`;
+      } else {
+        alert('Вы проиграли!');
+        timerNumber = 15;
+      }
+    }
+
+    time();
+    let timerId = setInterval(time, 1000);
+
+    console.log(timerNumber);
+    const globalContext = this;
+    document.addEventListener("keydown", function(KeyboardEvent) {      
+      let symbolCurrent = globalContext.currentSymbol.textContent;
+      // console.log(KeyboardEvent.key);
+      if(symbolCurrent === KeyboardEvent.key){
+        globalContext.success();
+      } else if (KeyboardEvent.key === "Shift" || KeyboardEvent.key === "Alt") {
+        // globalContext.success();
+      } else if (timerNumber === 0) {
+        globalContext.fail();
+      } else if (symbolCurrent !== KeyboardEvent.key) {
+        globalContext.fail();
+      }
+    })
     /*
       TODO:
       Написать обработчик события, который откликается
@@ -60,16 +96,26 @@ class Game {
 
   getWord() {
     const words = [
+        'я люблю kitkat',
+        'воротник',
+        'собака',
+        'щетина',
+        'звонок по facetime',
         'bob',
         'awesome',
         'netology',
+        'он работает в openspace',
         'hello',
+        'кошка',
         'kitty',
+        'яблоко',
         'rock',
         'youtube',
         'popcorn',
+        'на витрине вывеска sale',
         'cinema',
         'love',
+        'человек',
         'javascript'
       ],
       index = Math.floor(Math.random() * words.length);
@@ -91,4 +137,3 @@ class Game {
 }
 
 new Game(document.getElementById('game'))
-
