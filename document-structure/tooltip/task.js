@@ -1,16 +1,29 @@
-const tooltipArr = document.querySelectorAll(".has-tooltip");
+const select = document.getElementById("genre");
+const name = document.getElementById("name");
+const btn = document.querySelector(".btn");
+const content = document.querySelector(".content");
+const form =  document.forms[0];
 
-tooltipArr.forEach((elem) => {
-    let createTooltip = document.createElement("div");
-    createTooltip.textContent = String(elem.title);
-    createTooltip.classList.add("tooltip");
-    elem.appendChild(createTooltip);
-    const elemCoordinates = elem.getBoundingClientRect();
-    let left = Math.round(elemCoordinates.left);
-    elem.addEventListener("click", (e) => {
-        e.preventDefault();
-        console.log(createTooltip);
-        createTooltip.classList.toggle("tooltip_active");
-        createTooltip.setAttribute("style", `position: absolute; left: ${left}px`);
-    })
+const dramaSelect = document.createElement("option");
+const comedySelect = document.createElement("option");
+const fantasySelect = document.createElement("option");
+select.appendChild(dramaSelect);
+select.appendChild(comedySelect);
+select.appendChild(fantasySelect);
+dramaSelect.label = 'Драма';
+comedySelect.label = 'Комедия';
+fantasySelect.label = 'Фантастика';
+dramaSelect.value = 'Драма';
+comedySelect.value = 'Комедия';
+fantasySelect.value = 'Фантастика';
+
+form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const pName = document.createElement("p");
+    const pGenre = document.createElement("p");
+    content.appendChild(pName);
+    content.appendChild(pGenre);
+    pName.textContent = `Название фильма: ${name.value}`;
+    pGenre.textContent = `Жанр: ${select.value}`;
+    form.reset();
 })
