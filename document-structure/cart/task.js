@@ -3,7 +3,7 @@ const minusQuantity = Array.from(document.querySelectorAll(".product__quantity-c
 const addProduct = Array.from(document.querySelectorAll(".product__add"));
 const cartProducts = document.querySelector(".cart__products");
 const productImage = document.querySelectorAll(".product__image");
-const productQuantityValue = document.querySelectorAll(".product__quantity-value");
+let productQuantityValue = document.querySelectorAll(".product__quantity-value");
 
 plusQuantity.forEach((elem) => {
     elem.addEventListener("click", () => {
@@ -23,38 +23,36 @@ minusQuantity.forEach((elem) => {
     })
 })
 
-function createCartInBasket(elem){
-    let productsInBasket = Array.from(cartProducts.children);
-    const parentElem = elem.closest(".product");
-    const parentElemClone = parentElem.cloneNode(false);
-    parentElemClone.classList.remove("product");
-    parentElemClone.classList.add("cart__product");
-
-    const imgElem = productImage[parentElem.dataset.id - 1];
-    const imgElemClone = imgElem.cloneNode(false);
-    imgElemClone.classList.remove("product__image");
-    imgElemClone.classList.add("cart__product-image");
-
-    const cartProductCount = document.createElement("div");
-    cartProductCount.classList.add("cart__product-count");
-    let quantityValue = productQuantityValue[parentElem.dataset.id - 1].textContent;
-    cartProductCount.textContent = `${quantityValue}`;
-
-    let productsInBasketId = [];
-    productsInBasket.forEach((elem) => {
-        productsInBasketId.push(elem.dataset.id);
-    })
-
-    if(!productsInBasketId.includes(parentElem.dataset.id)){
-        parentElemClone.appendChild(imgElemClone);
-        parentElemClone.appendChild(cartProductCount); 
-        cartProducts.appendChild(parentElemClone.cloneNode(true));
-    }
-
-}
-
 addProduct.forEach((elem) => {
     elem.addEventListener("click", () => {
-        createCartInBasket(elem);
+        const parentElem = elem.closest(".product");
+        const parentElemId = Number(parentElem.dataset.id);
+        const imgElem = productImage[parentElem.dataset.id - 1];
+        const imgElemSrc = imgElem.src;
+        let quantityValue = Number(productQuantityValue[parentElem.dataset.id - 1].textContent);
+        let cartProduct = Array.from(document.querySelectorAll(".cart__product"));
+        let productCount = Array.from(document.querySelectorAll(".cart__product-count"));
+
+        let productsInBasketId = [];
+        cartProduct.forEach((elem) => {
+            productsInBasketId.push(elem.dataset.id);
+        })
+
+        if(productsInBasketId.includes(parentElem.dataset.id)){
+            let newQuantityValue = quantityValue;
+            newQuantityValue ++;
+            let count = Number(productCount[parentElem.dataset.id - 1].textContent);
+            productQuantityValue[parentElem.dataset.id - 1].textContent = `${newQuantityValue}`;
+            productCount[parentElem.dataset.id - 1].textContent = `${newQuantityValue}`;
+            console.log(count)
+
+        } else {
+            cartProducts.insertAdjacentHTML("beforeEnd",`
+                <div class="cart__product" data-id=${parentElemId}>
+                    <img src=${imgElemSrc} alt class="cart__product-image">
+                    <div class="cart__product-count">${quantityValue}</div>
+                </div>
+            `)
+        }
     })
 })
