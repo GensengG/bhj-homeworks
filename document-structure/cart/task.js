@@ -26,26 +26,23 @@ minusQuantity.forEach((elem) => {
 addProduct.forEach((elem) => {
     elem.addEventListener("click", () => {
         const parentElem = elem.closest(".product");
+        const prevSibling = elem.previousElementSibling;
+        const prevSiblingCoun = prevSibling.children[1].textContent;
         const parentElemId = Number(parentElem.dataset.id);
         const imgElem = productImage[parentElem.dataset.id - 1];
         const imgElemSrc = imgElem.src;
         let quantityValue = Number(productQuantityValue[parentElem.dataset.id - 1].textContent);
         let cartProduct = Array.from(document.querySelectorAll(".cart__product"));
-        let productCount = Array.from(document.querySelectorAll(".cart__product-count"));
 
-        let productsInBasketId = [];
-        cartProduct.forEach((elem) => {
-            productsInBasketId.push(elem.dataset.id);
-        })
+        let productInBasket = cartProduct.find((cart) => Number(cart.dataset.id) === parentElemId);
+        console.log(productInBasket);
 
-        if(productsInBasketId.includes(parentElem.dataset.id)){
-            let newQuantityValue = quantityValue;
-            newQuantityValue ++;
-            let count = Number(productCount[parentElem.dataset.id - 1].textContent);
-            productQuantityValue[parentElem.dataset.id - 1].textContent = `${newQuantityValue}`;
-            productCount[parentElem.dataset.id - 1].textContent = `${newQuantityValue}`;
-            console.log(count)
-
+        if(productInBasket){
+            let oldCount = Number(productInBasket.children[1].textContent);
+            let addedCount = Number(prevSiblingCoun);
+            let newQuantityValue = oldCount + addedCount;
+            productQuantityValue[parentElem.dataset.id - 1].textContent = 1;
+            productInBasket.children[1].textContent = `${newQuantityValue}`;
         } else {
             cartProducts.insertAdjacentHTML("beforeEnd",`
                 <div class="cart__product" data-id=${parentElemId}>
@@ -53,6 +50,7 @@ addProduct.forEach((elem) => {
                     <div class="cart__product-count">${quantityValue}</div>
                 </div>
             `)
+            productQuantityValue[parentElem.dataset.id - 1].textContent = 1;
         }
     })
 })
